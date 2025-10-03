@@ -61,4 +61,4 @@ This repo provides a simple, free way to keep your Notion database in sync with 
 
 ---
 
-Made for Laura (@codermumuk) 💖
+Made by Laura (@codermumuk | @Lanthanum89) 💖
