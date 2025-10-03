@@ -1,0 +1,36 @@
+name: Sync Portfolio to Notion
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * *"  # 08:00 London time daily (UTC may shift with DST)
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run sync
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          GH_USERNAME: ${{ vars.GH_USERNAME }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOPIC: portfolio
+          ARCHIVE_MISSING: "true"
+          DEFAULT_STATUS: "In Portfolio"
+          DEFAULT_PRIORITY: "Medium"
+          DEFAULT_IG_STATUS: "Not posted"
+        run: |
+          python sync_portfolio_to_notion.py
